@@ -13,6 +13,27 @@ const multipleEnum = {
   d: { text: '多选项3', status: 'Error' },
 };
 
+const record = {
+  id: 1,
+  dateRange: [1608711421789, 1608711421789],
+  digit: 99,
+  dtCreaDateTime: 1608711421789,
+  dtUpdateDateTime: 1608711421789,
+  multiple: ['a', 'c'],
+  password: '123456',
+  select: '1',
+  switch: false,
+  textarea: '这是一段文字',
+  uploadFile: [
+    {
+      id: '1',
+      url:
+        'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    },
+  ],
+  username: '用户名',
+};
+
 const Index = () => {
   const columns: CCColumns<TestInterface>[] = [
     {
@@ -233,7 +254,7 @@ const Index = () => {
         onFinish={onFinish}
         formmode={FormModeEnum.update}
         columns={columns}
-        record={null}
+        record={record}
         style={{ margin: '0 10px' }}
       >
         <Button>修改</Button>
@@ -242,7 +263,7 @@ const Index = () => {
         onFinish={onFinish}
         formmode={FormModeEnum.view}
         columns={columns}
-        record={null}
+        record={record}
       >
         <a>查看</a>
       </CCDrawer>
