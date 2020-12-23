@@ -11,8 +11,6 @@ import {
   Upload,
   Button,
 } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { ProColumns } from '@ant-design/pro-table';
 import { get } from 'lodash';
 import moment from 'moment';
 import { LayoutInterface, FormItemLayoutInterface, CCColumns } from '../interface';
@@ -104,7 +102,7 @@ const CCForm: React.FC<CCFormProps> = ({
                     {...item.formItem.props}
                   >
                     {item.formItem?.props?.children || (
-                      <Button icon={<UploadOutlined />}>上传文件</Button>
+                      <Button>上传文件</Button>
                     )}
                   </Upload>
                 </Form.Item>
