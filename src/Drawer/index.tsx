@@ -1,10 +1,10 @@
 import React, { useState, ReactNode, Fragment, CSSProperties } from 'react';
-import { Drawer, Button, Row, Form } from 'antd';
+import { Drawer, Button, Row, Form, Spin } from 'antd';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { FormModeEnum, FormModeLabelEnum } from '../interface';
 import { DrawerProps } from 'antd/lib/drawer';
 import { ProColumns } from '@ant-design/pro-table';
-import styles from './index.less';
+import './index.less';
 import CCForm from '../Form';
 
 interface CCDrawerProps {
@@ -14,7 +14,7 @@ interface CCDrawerProps {
   onClose?: () => void;
   footer?: ReactNode;
   loading?: boolean;
-  onFinish?: (values?: any) => void;
+  onFinish?: (values?: any) => Promise<any>;
   columns?: ProColumns<any>[];
   record?: any;
   onClickCallback?: () => void;
@@ -52,6 +52,7 @@ const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
     ...ext
   } = props;
   const [visible, setVisible] = useState(false);
+  const [stateLoading, setStateLoading] = useState(false);
 
   const [form] = Form.useForm();
 
@@ -67,12 +68,22 @@ const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
     }
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     form.validateFields().then((values) => {
-      form.resetFields();
       if (onFinish) {
-        onFinish(values);
-        setVisible(false);
+        setStateLoading(true)
+        onFinish(values)
+          .then(res => {
+            if (res.success) {
+              form.resetFields();
+              setStateLoading(false)
+              setVisible(false);
+            }
+          })
+          .catch(err => {
+            setStateLoading(false)
+            console.log('onFinish Error', err)
+          })
       }
     });
   };
@@ -141,11 +152,13 @@ const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
             {...descriptionsProps}
           />
         ) : (
-            <Form form={form}>
-              <CCForm columns={columns} record={record} />
-            </Form>
+            <Spin spinning={stateLoading}>
+              <Form form={form}>
+                <CCForm columns={columns} record={record} />
+              </Form>
+            </Spin>
           )}
-        <div style={{ width }} className={styles.btnWrap}>
+        <div style={{ width }} className='btnWrap'>
           {footer || (
             <Fragment>
               {formmode === FormModeEnum.view ? (
@@ -157,7 +170,7 @@ const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
                       type="primary"
                       style={{ marginLeft: 8 }}
                       onClick={onSubmit}
-                      loading={loading}
+                      loading={stateLoading}
                     >
                       确定
                   </Button>

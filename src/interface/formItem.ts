@@ -5,6 +5,7 @@ import { ProColumnType } from '@ant-design/pro-table';
 import { TextAreaProps } from 'antd/lib/input/TextArea';
 import { InputNumberProps } from 'antd/lib/input-number';
 import { UploadProps } from 'antd/lib/upload';
+import { InputProps } from 'antd/lib/input';
 
 interface FormItemPropsInterface {
   rules?: Rule[];
@@ -19,7 +20,7 @@ export interface FormItemContent {
   formItemLayout?: FormItemLayoutInterface;
   element?: ReactNode | null | any;
   style?: CSSProperties;
-  props?: FormItemPropsInterface & TextAreaProps & InputNumberProps & UploadProps;
+  props?: FormItemPropsInterface & TextAreaProps & InputNumberProps & UploadProps & InputProps;
 }
 
 export interface CCColumns<T> extends ProColumnType<T> {

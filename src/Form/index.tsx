@@ -65,6 +65,24 @@ const CCForm: React.FC<CCFormProps> = ({
 
           const rules = item.formItem?.props?.rules || item.formItemProps?.rules;
 
+          if (item.valueType === 'text') {
+            return (
+              <Col key={key} {...newColLayout}>
+                <Form.Item
+                  shouldUpdate
+                  label={item.title}
+                  name={item.dataIndex}
+                  {...newFormItemLayout}
+                  {...item.formItemProps}
+                  rules={rules}
+                  initialValue={initialValue}
+                >
+                  <Input {...item.formItem?.props} />
+                </Form.Item>
+              </Col>
+            )
+          }
+
           if (item.formItem?.props?.elType === 'upload') {
             const fileList = !isEmpty(initialValue) ? initialValue.map((file: any, index: number) => {
               let name = '';
