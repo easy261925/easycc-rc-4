@@ -1,3 +1,3 @@
 export { FormItemLayoutInterface, LayoutInterface } from './layout'
-export { CCColumns } from './formItem'
+export { CCColumns, modeType } from './formItem'
 export { FormModeEnum, FormModeLabelEnum } from './formmode'

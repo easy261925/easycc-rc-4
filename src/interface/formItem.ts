@@ -26,3 +26,5 @@ export interface FormItemContent {
 export interface CCColumns<T> extends ProColumnType<T> {
   formItem?: FormItemContent;
 }
+
+export type modeType = 'multiple' | 'tags' | undefined

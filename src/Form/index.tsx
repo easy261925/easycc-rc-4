@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import { get } from 'lodash';
 import moment from 'moment';
-import { LayoutInterface, FormItemLayoutInterface, CCColumns } from '../interface';
+import { LayoutInterface, FormItemLayoutInterface, CCColumns, modeType } from '../interface';
 import { isEmpty } from '../utils';
 import PickerWithType from './PickerWithType';
 
@@ -244,6 +244,11 @@ const CCForm: React.FC<CCFormProps> = ({
 
           if (item.valueEnum && Object.keys(item.valueEnum).length > 0) {
             const selectKeys = Object.keys(item.valueEnum);
+
+            let mode: modeType = undefined;
+            if (item?.fieldProps?.mode === 'multiple' || item?.formItem?.props?.mode === 'multiple') {
+              mode = 'multiple'
+            }
             return (
               <Col key={key} {...newColLayout}>
                 <Form.Item
@@ -256,7 +261,7 @@ const CCForm: React.FC<CCFormProps> = ({
                   initialValue={initialValue || []}
                 >
                   <Select
-                    mode={item.formItem?.props?.mode}
+                    mode={mode}
                     placeholder={item.formItem?.props?.placeholder}
                   >
                     {selectKeys.map((value) => {

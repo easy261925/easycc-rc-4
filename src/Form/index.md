@@ -19,14 +19,10 @@ const index = () => {
   const [form] = Form.useForm();
   const columns: CCColumns<TestInterface>[] = [
     {
-      title: '输入框',
-      dataIndex: 'username',
-      valueType: 'text',
-    },
-    {
       title: '用户名',
       dataIndex: 'username',
       tooltip: '用户名',
+      valueType: 'text',
       formItemProps: {
         rules: [
           {
@@ -54,7 +50,9 @@ const index = () => {
             span: 16,
           },
         },
-        element: <Input placeholder="请输入用户名" />,
+        props: {
+          placeholder: '请输入用户名',
+        },
       },
     },
     {

@@ -27,6 +27,7 @@ interface CCDrawerProps {
   };
   bodyStyle?: CSSProperties
   style?: CSSProperties
+  buttonText?: string
 }
 
 const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
@@ -49,6 +50,7 @@ const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
     descriptionsProps,
     bodyStyle = { marginBottom: 24 },
     style,
+    buttonText = '打开',
     ...ext
   } = props;
   const [visible, setVisible] = useState(false);
@@ -123,7 +125,7 @@ const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
               setVisible(true);
             }}
           >
-            打开
+            {buttonText}
           </Button>
         )}
 

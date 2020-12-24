@@ -5,7 +5,7 @@ Demo:
 ```tsx
 import React, { Fragment } from 'react';
 import { CCDrawer, FormModeEnum } from 'easycc-rc-4';
-import { Button, Divider, Input, Form } from 'antd';
+import { Button, Divider, Input, Form, Row } from 'antd';
 const multipleEnum = {
   a: { text: '多选项0', status: 'Default' },
   b: { text: '多选项1', status: 'Processing' },
@@ -242,31 +242,33 @@ const Index = () => {
 
   return (
     <div>
-      <CCDrawer
-        onFinish={onFinish}
-        formmode={FormModeEnum.create}
-        columns={columns}
-        record={null}
-      >
-        <Button type="primary">新建</Button>
-      </CCDrawer>
-      <CCDrawer
-        onFinish={onFinish}
-        formmode={FormModeEnum.update}
-        columns={columns}
-        record={record}
-        style={{ margin: '0 10px' }}
-      >
-        <Button>修改</Button>
-      </CCDrawer>
-      <CCDrawer
-        onFinish={onFinish}
-        formmode={FormModeEnum.view}
-        columns={columns}
-        record={record}
-      >
-        <a>查看</a>
-      </CCDrawer>
+      <Row type="flex" align="middle">
+        <CCDrawer
+          onFinish={onFinish}
+          formmode={FormModeEnum.create}
+          columns={columns}
+          record={null}
+        >
+          <Button type="primary">新建</Button>
+        </CCDrawer>
+        <CCDrawer
+          onFinish={onFinish}
+          formmode={FormModeEnum.update}
+          columns={columns}
+          record={record}
+          style={{ margin: '0 10px' }}
+        >
+          <Button>修改</Button>
+        </CCDrawer>
+        <CCDrawer
+          onFinish={onFinish}
+          formmode={FormModeEnum.view}
+          columns={columns}
+          record={record}
+        >
+          <a>查看</a>
+        </CCDrawer>
+      </Row>
     </div>
   );
 };
