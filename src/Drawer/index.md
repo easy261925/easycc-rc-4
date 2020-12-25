@@ -5,7 +5,7 @@ Demo:
 ```tsx
 import React, { Fragment } from 'react';
 import { CCDrawer, FormModeEnum } from 'easycc-rc-4';
-import { Button, Divider, Input, Form, Row } from 'antd';
+import { Button, Divider, Input, Form, Row, Select, Spin } from 'antd';
 const multipleEnum = {
   a: { text: '多选项0', status: 'Default' },
   b: { text: '多选项1', status: 'Processing' },
@@ -32,10 +32,36 @@ const record = {
     },
   ],
   username: '用户名',
+  selectUser: [],
 };
 
 const Index = () => {
   const columns: CCColumns<TestInterface>[] = [
+    {
+      title: '选择联系人',
+      dataIndex: 'selectUser',
+      formItem: {
+        elType: 'selectUser',
+        element: (
+          <Select
+            mode="multiple"
+            placeholder="Select users"
+            notFoundContent={<Spin size="small" />}
+            filterOption={false}
+            onSearch={value => {
+              console.log('value', value);
+            }}
+            style={{ width: '100%' }}
+          >
+            {[{ text: '用户一', value: '1' }].map(d => (
+              <Select.Option key={d.value} value={d.value}>
+                {d.text}
+              </Select.Option>
+            ))}
+          </Select>
+        ),
+      },
+    },
     {
       title: '用户名',
       dataIndex: 'username',
@@ -236,8 +262,13 @@ const Index = () => {
     },
   ];
 
-  const onFinish = values => {
+  const onFinish = async values => {
     console.log('onFinish', values);
+    return new Promise(resolve => {
+      resolve({
+        success: true,
+      });
+    });
   };
 
   return (

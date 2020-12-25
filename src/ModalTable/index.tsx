@@ -1,17 +1,19 @@
-import React, { CSSProperties, ReactNode } from 'react';
-import ProTable from '@ant-design/pro-table';
-import { Button, Space, Tree, Input } from 'antd'
+import React, { CSSProperties, ReactNode, useState, useRef } from 'react';
+import ProTable, { ActionType, ProColumns, RequestData } from '@ant-design/pro-table';
+import { Button, Space, Tree, Input, Row, Col } from 'antd'
 import { CCColumns } from '../interface'
 import CCModal from '../Modal'
-import { Member, tableListDataSource } from './data'
+import { treeData } from './data'
+import { TablePagination } from '../interface'
 import './index.less'
+import { SortOrder } from 'antd/lib/table/interface';
 
 interface CCModalTableProps {
+  column?: number
   style?: CSSProperties
-  onClickCallback?: () => void;
   buttonText?: string
   title?: string
-  onFinish?: (values?: any) => Promise<any>;
+  onFinish?: (rowKyes?: any, ...args: any[]) => void;
   onClose?: () => void;
   footer?: ReactNode
   cancelText?: string
@@ -19,15 +21,30 @@ interface CCModalTableProps {
   content?: ReactNode
   width?: number
   bodyStyle?: CSSProperties
-  request?: (params: { [key: string]: any }) => Promise<any>;
+  request?: (params: any & {
+    pageSize?: number;
+    current?: number;
+    keyword?: string;
+  }, sort: {
+    [key: string]: SortOrder;
+  }, filter: {
+    [key: string]: React.ReactText[];
+  }) => Promise<RequestData<any>>;
+  columns?: CCColumns<any>[] & ProColumns<any>[]
+  pagination?: TablePagination
+  defaultExpandAll?: boolean
+  defaultSelectedTreeKeys?: string[]
+  tableParams?: any
+  onSelectTreeKeys?: (values: any, info: any, actionRef: any) => void
+  treeData?: any[]
+  rowKey?: string
 }
 
 const Index: React.FC<CCModalTableProps> = (props) => {
   const {
+    column = 2,
     style,
     children,
-    onClickCallback,
-    buttonText = '打开',
     title = 'ModalTable 标题',
     onFinish,
     onClose,
@@ -40,93 +57,105 @@ const Index: React.FC<CCModalTableProps> = (props) => {
       minHeight: 450,
     },
     request,
+    columns = [],
+    pagination = { pageSize: 10, showTotal: () => null },
+    defaultExpandAll = true,
+    defaultSelectedTreeKeys,
+    tableParams,
+    onSelectTreeKeys,
+    treeData,
+    rowKey = 'id',
     ...ext
   } = props
 
-  const columns: CCColumns<Member>[] = [
-    {
-      dataIndex: 'avatar',
-      title: '成员名称',
-      valueType: 'avatar',
-      render: (dom, record) => (
-        <Space>
-          <span>{dom}</span>
-          {record.nickName}
-        </Space>
-      ),
-    },
-    {
-      dataIndex: 'email',
-      title: '账号',
-    },
-    {
-      dataIndex: 'phone',
-      title: '手机号',
-      search: false,
-    },
-    {
-      dataIndex: 'permission',
-      title: '权限范围',
-      search: false,
-      render: (_, record) => {
-        const { role, permission = [] } = record;
-        if (role === 'admin') {
-          return '所有权限';
-        }
-        return permission && permission.length > 0 ? permission.join('、') : '无';
-      },
-    },
-  ];
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [rows, setRows] = useState<any[]>([]);
+  const [rowKeys, setRowKeys] = useState<string[] | number[]>([]);
 
-  const contentRender = () => {
+  const actionRef = useRef<ActionType>();
+
+  const renderTable = () => {
     return (
-      <ProTable<Member>
+      <ProTable<any>
+        size='small'
+        actionRef={actionRef}
         className='container'
         params={{
-          pageSize: 10
+          pageSize: 99999,
+          ...tableParams
         }}
         columns={columns}
-        request={(params, sorter, filter) => {
-          // 表单搜索项会从 params 传入，传递给后端接口。
-          console.log(params, sorter, filter);
-          return Promise.resolve({
-            data: tableListDataSource,
-            success: true,
-          });
-        }}
-        rowKey="outUserNo"
-        pagination={{
-          showQuickJumper: true,
-          pageSize: 10,
-          total: tableListDataSource.length
-        }}
+        request={request}
+        rowKey={rowKey}
+        pagination={pagination}
         toolBarRender={false}
         rowSelection={{
+          onChange: (selectRowKeys, info) => {
+            setRowKeys(selectRowKeys as any)
+            setRows(info)
+          }
         }}
       />
     )
   }
 
-  const renderSelectList = () => {
+  const renderTree = () => {
     return (
       <div>
-        {/* <Tree
-          onExpand={onExpand}
-          expandedKeys={expandedKeys}
-          autoExpandParent={autoExpandParent}
-          treeData={loop(gData)}
-        /> */}
+        <Tree
+          defaultExpandAll={defaultExpandAll}
+          onSelect={onSelect}
+          selectedKeys={selectedKeys}
+          treeData={treeData}
+        />
       </div>
     )
+  }
+
+  const onSelect = (selectedKeys: any, info: any,) => {
+    if (selectedKeys && selectedKeys.length > 0) {
+      if (onSelectTreeKeys) {
+        onSelectTreeKeys(selectedKeys, info, actionRef)
+      }
+      setSelectedKeys(selectedKeys);
+    }
+  };
+
+  const renderContent = () => {
+    return (
+      <Row>
+        <Col span={column === 2 ? 6 : 0}>
+          {renderTree()}
+        </Col>
+        <Col span={column === 2 ? 18 : 24}>
+          {renderTable()}
+        </Col>
+      </Row>
+    )
+  }
+
+  const onSubmit = async () => {
+    if (onFinish) {
+      return new Promise((resolve, reject) => {
+        onFinish(rowKeys, rows)
+        return resolve({
+          success: true
+        })
+      })
+    }
   }
 
   return (
     <CCModal
       modalStyle={{ top: 10 }}
       title={title}
-      content={content || contentRender()}
+      content={content || renderContent()}
       bodyStyle={bodyStyle}
       width={850}
+      cancelText={cancelText}
+      okText={okText}
+      destroyOnClose
+      onFinish={onSubmit}
     >
       <Button>选择联系人</Button>
     </CCModal>

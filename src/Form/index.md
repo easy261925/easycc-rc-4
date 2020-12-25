@@ -5,7 +5,7 @@ Demo:
 ```tsx
 import React, { useState } from 'react';
 import { CCForm } from 'easycc-rc-4';
-import { Button, Divider, Input, Form } from 'antd';
+import { Button, Divider, Input, Form, Select } from 'antd';
 
 const multipleEnum = {
   a: { text: '多选项0', status: 'Default' },

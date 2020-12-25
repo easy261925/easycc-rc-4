@@ -15,6 +15,7 @@ interface CCModalProps {
   width?: number
   bodyStyle?: CSSProperties
   modalStyle?: CSSProperties
+  destroyOnClose?: boolean
 }
 
 const CCModal: React.FC<CCModalProps> = (props) => {
@@ -33,6 +34,7 @@ const CCModal: React.FC<CCModalProps> = (props) => {
     width = 650,
     bodyStyle = { minHeight: 450 },
     modalStyle,
+    destroyOnClose = true,
     ...ext
   } = props
   const [visible, setVisible] = useState(false);
@@ -106,6 +108,7 @@ const CCModal: React.FC<CCModalProps> = (props) => {
         width={width}
         bodyStyle={bodyStyle}
         style={modalStyle}
+        destroyOnClose={destroyOnClose}
         {...ext}
       >
         {content}

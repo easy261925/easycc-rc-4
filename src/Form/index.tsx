@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Col,
   Form,
@@ -10,6 +10,7 @@ import {
   Switch,
   Upload,
   Button,
+  Spin
 } from 'antd';
 import { get } from 'lodash';
 import moment from 'moment';
@@ -277,6 +278,27 @@ const CCForm: React.FC<CCFormProps> = ({
             );
           }
 
+          if (item.formItem.elType === 'selectUser') {
+            return (
+              <Col key={key} {...newColLayout}>
+                <Form.Item
+                  shouldUpdate
+                  label={item.title}
+                  name={item.dataIndex}
+                  {...newFormItemLayout}
+                  {...item.formItemProps}
+                  rules={rules}
+                  initialValue={initialValue || []}
+                >
+                  {React.cloneElement(item.formItem?.element, {
+                    ...item.formItemProps,
+                    ...item.formItem.props,
+                  })}
+                </Form.Item>
+              </Col>
+            );
+          }
+
           if (item.formItem && item.formItem.element) {
             return (
               <Col key={key} {...newColLayout}>
@@ -297,6 +319,7 @@ const CCForm: React.FC<CCFormProps> = ({
               </Col>
             );
           }
+
           return null;
         });
       return formItems;
