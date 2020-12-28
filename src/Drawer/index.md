@@ -12,6 +12,8 @@
 import React, { Fragment } from 'react';
 import { CCDrawer, FormModeEnum } from 'easycc-rc-4';
 import { Button, Divider, Input, Form, Row, Select, Spin } from 'antd';
+import ProTable, { ProColumns } from '@ant-design/pro-table';
+
 const multipleEnum = {
   a: { text: '多选项0', status: 'Default' },
   b: { text: '多选项1', status: 'Processing' },
@@ -60,6 +62,9 @@ const Index = () => {
           formmode={FormModeEnum.view}
           columns={columns}
           record={entity}
+          descriptionsProps={{
+            columns: columns.slice(1, columns.length),
+          }}
         >
           <a>{dom}</a>
         </CCDrawer>
@@ -162,6 +167,7 @@ const Index = () => {
           ],
         },
       },
+      search: false,
     },
     {
       title: '创建时间',
@@ -247,6 +253,7 @@ const Index = () => {
         ),
       },
       render: () => '选择的联系人',
+      search: false,
     },
     {
       title: '操作',
@@ -280,33 +287,29 @@ const Index = () => {
 
   return (
     <div>
-      <Row type="flex" align="middle">
-        <CCDrawer
-          onFinish={onFinish}
-          formmode={FormModeEnum.create}
-          columns={columns}
-          record={null}
-        >
-          <Button type="primary">新建</Button>
-        </CCDrawer>
-        <CCDrawer
-          onFinish={onFinish}
-          formmode={FormModeEnum.update}
-          columns={columns}
-          record={record}
-          style={{ margin: '0 10px' }}
-        >
-          <Button>修改</Button>
-        </CCDrawer>
-        <CCDrawer
-          onFinish={onFinish}
-          formmode={FormModeEnum.view}
-          columns={columns}
-          record={record}
-        >
-          <a>查看</a>
-        </CCDrawer>
-      </Row>
+      <ProTable<TestInterface>
+        columns={columns}
+        toolBarRender={() => [
+          <CCDrawer
+            key="create"
+            formmode={FormModeEnum.create}
+            columns={columns}
+            title="待办"
+            onFinish={onFinish}
+          >
+            <Button type="primary">新建待办</Button>
+          </CCDrawer>,
+        ]}
+        request={(params, sorter, filter) => {
+          return new Promise(resolve => {
+            setTimeout(() => {
+              resolve({ success: true, data: [{ ...record }] });
+            }, 500);
+          });
+        }}
+        onSubmit={params => console.log('查询', params)}
+        rowKey="id"
+      />
     </div>
   );
 };
