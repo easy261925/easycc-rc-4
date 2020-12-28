@@ -1,6 +1,12 @@
 ## Drawer
 
-Demo:
+抽屉组件:
+
+### 何时使用
+
+- 简单业务的增删改查中使用的抽屉组件
+
+### 使用示例
 
 ```tsx
 import React, { Fragment } from 'react';
@@ -32,36 +38,11 @@ const record = {
     },
   ],
   username: '用户名',
-  selectUser: [],
+  selectSearch: [],
 };
 
 const Index = () => {
   const columns: CCColumns<TestInterface>[] = [
-    {
-      title: '选择联系人',
-      dataIndex: 'selectUser',
-      formItem: {
-        elType: 'selectUser',
-        element: (
-          <Select
-            mode="multiple"
-            placeholder="Select users"
-            notFoundContent={<Spin size="small" />}
-            filterOption={false}
-            onSearch={value => {
-              console.log('value', value);
-            }}
-            style={{ width: '100%' }}
-          >
-            {[{ text: '用户一', value: '1' }].map(d => (
-              <Select.Option key={d.value} value={d.value}>
-                {d.text}
-              </Select.Option>
-            ))}
-          </Select>
-        ),
-      },
-    },
     {
       title: '用户名',
       dataIndex: 'username',
@@ -242,6 +223,32 @@ const Index = () => {
       },
     },
     {
+      title: '选择联系人',
+      dataIndex: 'selectSearch',
+      formItem: {
+        elType: 'selectSearch',
+        element: (
+          <Select
+            mode="multiple"
+            placeholder="选择联系人"
+            notFoundContent={<Spin size="small" />}
+            filterOption={false}
+            onSearch={value => {
+              console.log('value', value);
+            }}
+            style={{ width: '100%' }}
+          >
+            {[{ text: '用户一', value: '1' }].map(d => (
+              <Select.Option key={d.value} value={d.value}>
+                {d.text}
+              </Select.Option>
+            ))}
+          </Select>
+        ),
+      },
+      render: () => '选择的联系人',
+    },
+    {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
@@ -306,3 +313,30 @@ const Index = () => {
 
 export default Index;
 ```
+
+## API
+
+### CCDrawer
+
+| 参数              | 说明                                                                                                                          | 类型                             | 默认值                  | 版本 |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------- | ---- |
+| columns           | 表格列的配置描述，列描述数据对象，是 columns 中的一项，参考 `CCForm` 组件中的 `columns`。                                     | `CCColumns[]`                    |
+| formmode          | 抽屉中 Form 模式                                                                                                              | `FormModeEnum`                   |
+| title             | 抽屉标题                                                                                                                      | `string`                         |
+| onClose           | 抽屉的 `关闭` 事件,在抽屉关闭时执行                                                                                           |
+| footer            | 自定义 footer                                                                                                                 |
+| onClickCallback   | 抽屉打开按钮的点击事件，在抽屉打开时执行                                                                                      |
+| descriptionsProps | 当 formmode === `view` 时，查看模式下的 props,参考[ProDescriptions](https://procomponents.ant.design/components/descriptions) |
+| bodyStyle         | Drawer 的 bodyStyle                                                                                                           | `css`                            | marginBottom: 24        |
+| style             | CCDrawer style                                                                                                                | `css`                            | display: 'inline-block' |
+| buttonText        | 打开抽屉 Button 中的文字                                                                                                      | `string`                         | '打开'                  |
+| onFinish          | `编辑` 或 `新增` 模式的获取数据方法, 类型为 Promise 函数，需要调用后台 `接口`, 如果返回 `success: true`,则关闭抽屉            | `(values?: any) => Promise<any>` |
+| record            | 传入需要展示或编辑的`单条数据`                                                                                                |
+
+### FormModeEnum
+
+| 参数   | 说明     | 类型   | 默认值   |
+| ------ | -------- | ------ | -------- |
+| create | 新建模式 | string | 'create' |
+| view   | 查看模式 | string | 'view'   |
+| update | 修改模式 | string | 'update' |

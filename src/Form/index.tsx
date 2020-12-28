@@ -278,7 +278,7 @@ const CCForm: React.FC<CCFormProps> = ({
             );
           }
 
-          if (item.formItem.elType === 'selectUser') {
+          if (item.formItem.elType === 'selectSearch') {
             return (
               <Col key={key} {...newColLayout}>
                 <Form.Item

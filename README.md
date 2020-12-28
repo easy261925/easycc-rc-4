@@ -1,27 +1,23 @@
 # easycc-rc-4
 
-## Getting Started
+## 开始使用
 
-Install dependencies,
+安装方法
 
-```bash
-$ npm i
+```
+npm i easycc-rc-4
 ```
 
-Start the dev server,
+or
 
-```bash
-$ npm start
+```
+yarn add easycc-rc-4
 ```
 
-Build documentation,
+## 相关组件
 
-```bash
-$ npm run docs:build
-```
+- [表单组件 CCForm](./src/Form/index.md)
 
-Build library via `father-build`,
+- [抽屉组件 CCDrawerm](./src/Drawer/index.md)
 
-```bash
-$ npm run build
-```
+- [弹窗组件 CCModal](./src/Modal/index.md)

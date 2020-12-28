@@ -35,7 +35,7 @@ const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
     propsVisible,
     children,
     title = '抽屉',
-    formmode = FormModeEnum.view,
+    formmode,
     width = 650,
     placement,
     closable = true,
