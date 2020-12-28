@@ -18,6 +18,6 @@ yarn add easycc-rc-4
 
 - [表单组件 CCForm](./src/Form/index.md)
 
-- [抽屉组件 CCDrawerm](./src/Drawer/index.md)
+- [抽屉组件 CCDrawer](./src/Drawer/index.md)
 
 - [弹窗组件 CCModal](./src/Modal/index.md)
