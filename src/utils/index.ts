@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 export const isEmpty = (value: any) => {
   if (value === undefined || value === null) {
     return true;
@@ -9,3 +11,8 @@ export const isEmpty = (value: any) => {
 
   return false;
 };
+
+export function useForceUpdate() {
+  const [, setValue] = useState(0);
+  return () => setValue((value: number) => value + 1);
+}

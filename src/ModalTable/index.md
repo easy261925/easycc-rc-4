@@ -47,9 +47,7 @@ const Index = () => {
         if (role === 'admin') {
           return '所有权限';
         }
-        return permission && permission.length > 0
-          ? permission.join('、')
-          : '无';
+        return permission && permission.length > 0 ? permission.join('、') : '无';
       },
     },
   ];

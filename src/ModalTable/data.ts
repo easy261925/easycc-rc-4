@@ -36,7 +36,6 @@ for (let i = 0; i < 30; i += 1) {
   });
 }
 
-
 const treeData = [
   {
     title: '0-0',
@@ -81,4 +80,4 @@ const treeData = [
   },
 ];
 
-export { tableListDataSource, treeData }
+export { tableListDataSource, treeData };

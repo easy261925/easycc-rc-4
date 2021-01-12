@@ -35,8 +35,7 @@ const record = {
   uploadFile: [
     {
       id: '1',
-      url:
-        'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
     },
   ],
   username: '用户名',
@@ -154,7 +153,7 @@ const Index = () => {
       title: '多选',
       dataIndex: 'multiple',
       valueEnum: multipleEnum,
-      renderText: val =>
+      renderText: (val) =>
         val ? val.map((item: string) => multipleEnum[item].text).join(',') : '',
       formItem: {
         props: {
@@ -197,12 +196,12 @@ const Index = () => {
       dataIndex: 'switch',
       formItem: {
         props: {
-          elType: 'switch',
+          eltype: 'switch',
         },
       },
       search: false,
       hideInTable: true,
-      render: val => (val ? '选中' : '未选中'),
+      render: (val) => (val ? '选中' : '未选中'),
     },
     {
       title: '上传图片',
@@ -210,7 +209,7 @@ const Index = () => {
       search: false,
       formItem: {
         props: {
-          elType: 'upload',
+          eltype: 'upload',
           action: '/upload.do',
           // listType: 'picture',
           multiple: true,
@@ -221,7 +220,7 @@ const Index = () => {
       hideInTable: true,
       renderText: (val, entity) => {
         if (entity.uploadFile && entity.uploadFile.length > 0) {
-          return entity.uploadFile.map(file => {
+          return entity.uploadFile.map((file) => {
             return <img src={file.url} key={file.id} style={{ width: 40 }} />;
           });
         }
@@ -232,19 +231,19 @@ const Index = () => {
       title: '选择联系人',
       dataIndex: 'selectSearch',
       formItem: {
-        elType: 'selectSearch',
+        eltype: 'selectSearch',
         element: (
           <Select
             mode="multiple"
             placeholder="选择联系人"
             notFoundContent={<Spin size="small" />}
             filterOption={false}
-            onSearch={value => {
+            onSearch={(value) => {
               console.log('value', value);
             }}
             style={{ width: '100%' }}
           >
-            {[{ text: '用户一', value: '1' }].map(d => (
+            {[{ text: '用户一', value: '1' }].map((d) => (
               <Select.Option key={d.value} value={d.value}>
                 {d.text}
               </Select.Option>
@@ -276,9 +275,9 @@ const Index = () => {
     },
   ];
 
-  const onFinish = async values => {
+  const onFinish = async (values) => {
     console.log('onFinish', values);
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve({
         success: true,
       });
@@ -301,13 +300,13 @@ const Index = () => {
           </CCDrawer>,
         ]}
         request={(params, sorter, filter) => {
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             setTimeout(() => {
               resolve({ success: true, data: [{ ...record }] });
             }, 500);
           });
         }}
-        onSubmit={params => console.log('查询', params)}
+        onSubmit={(params) => console.log('查询', params)}
         rowKey="id"
       />
     </div>
@@ -321,20 +320,20 @@ export default Index;
 
 ### CCDrawer
 
-| 参数              | 说明                                                                                                                          | 类型                             | 默认值                  | 版本 |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------- | ---- |
-| columns           | 表格列的配置描述，列描述数据对象，是 columns 中的一项，参考 `CCForm` 组件中的 `columns`。                                     | `CCColumns[]`                    |
-| formmode          | 抽屉中 Form 模式                                                                                                              | `FormModeEnum`                   |
-| title             | 抽屉标题                                                                                                                      | `string`                         |
-| onClose           | 抽屉的 `关闭` 事件,在抽屉关闭时执行                                                                                           |
-| footer            | 自定义 footer                                                                                                                 |
-| onClickCallback   | 抽屉打开按钮的点击事件，在抽屉打开时执行                                                                                      |
+| 参数 | 说明 | 类型 | 默认值 | 版本 |
+| --- | --- | --- | --- | --- |
+| columns | 表格列的配置描述，列描述数据对象，是 columns 中的一项，参考 `CCForm` 组件中的 `columns`。 | `CCColumns[]` |
+| formmode | 抽屉中 Form 模式 | `FormModeEnum` |
+| title | 抽屉标题 | `string` |
+| onClose | 抽屉的 `关闭` 事件,在抽屉关闭时执行 |
+| footer | 自定义 footer |
+| onClickCallback | 抽屉打开按钮的点击事件，在抽屉打开时执行 |
 | descriptionsProps | 当 formmode === `view` 时，查看模式下的 props,参考[ProDescriptions](https://procomponents.ant.design/components/descriptions) |
-| bodyStyle         | Drawer 的 bodyStyle                                                                                                           | `css`                            | marginBottom: 24        |
-| style             | CCDrawer style                                                                                                                | `css`                            | display: 'inline-block' |
-| buttonText        | 打开抽屉 Button 中的文字                                                                                                      | `string`                         | '打开'                  |
-| onFinish          | `编辑` 或 `新增` 模式的获取数据方法, 类型为 Promise 函数，需要调用后台 `接口`, 如果返回 `success: true`,则关闭抽屉            | `(values?: any) => Promise<any>` |
-| record            | 传入需要展示或编辑的`单条数据`                                                                                                |
+| bodyStyle | Drawer 的 bodyStyle | `css` | marginBottom: 24 |
+| style | CCDrawer style | `css` | display: 'inline-block' |
+| buttonText | 打开抽屉 Button 中的文字 | `string` | '打开' |
+| onFinish | `编辑` 或 `新增` 模式的获取数据方法, 类型为 Promise 函数，需要调用后台 `接口`, 如果返回 `success: true`,则关闭抽屉 | `(values?: any) => Promise<any>` |
+| record | 传入需要展示或编辑的`单条数据` |
 
 ### FormModeEnum
 

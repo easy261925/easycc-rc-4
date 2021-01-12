@@ -1,21 +1,21 @@
-import React, { CSSProperties, Fragment, useState, ReactNode } from 'react'
-import { Modal, Button } from 'antd'
+import React, { CSSProperties, Fragment, useState, ReactNode } from 'react';
+import { Modal, Button } from 'antd';
 
 interface CCModalProps {
-  style?: CSSProperties
+  style?: CSSProperties;
   onClickCallback?: () => void;
-  buttonText?: string
-  title?: string
+  buttonText?: string;
+  title?: string;
   onFinish?: (values?: any) => Promise<any>;
   onClose?: () => void;
-  footer?: ReactNode
-  cancelText?: string
-  okText?: string
-  content?: ReactNode
-  width?: number
-  bodyStyle?: CSSProperties
-  modalStyle?: CSSProperties
-  destroyOnClose?: boolean
+  footer?: ReactNode;
+  cancelText?: string;
+  okText?: string;
+  content?: ReactNode;
+  width?: number;
+  bodyStyle?: CSSProperties;
+  modalStyle?: CSSProperties;
+  destroyOnClose?: boolean;
 }
 
 const CCModal: React.FC<CCModalProps> = (props) => {
@@ -36,28 +36,29 @@ const CCModal: React.FC<CCModalProps> = (props) => {
     modalStyle,
     destroyOnClose = true,
     ...ext
-  } = props
+  } = props;
   const [visible, setVisible] = useState(false);
+  // eslint-disable-next-line
   const [stateLoading, setStateLoading] = useState(false);
 
   const onSubmit = async () => {
     if (onFinish) {
-      setStateLoading(true)
+      setStateLoading(true);
       onFinish()
-        .then(res => {
+        .then((res) => {
           if (res.success) {
-            setStateLoading(false)
+            setStateLoading(false);
             setVisible(false);
           }
         })
-        .catch(err => {
-          setStateLoading(false)
-          console.log('onFinish Error', err)
-        })
+        .catch((err) => {
+          setStateLoading(false);
+          console.log('onFinish Error', err);
+        });
     } else {
       setVisible(false);
     }
-  }
+  };
 
   const onClosed = () => {
     if (onClose) {
@@ -66,8 +67,7 @@ const CCModal: React.FC<CCModalProps> = (props) => {
     } else {
       setVisible(false);
     }
-  }
-
+  };
 
   return (
     <div style={{ display: 'inline-block', ...style }}>
@@ -84,18 +84,18 @@ const CCModal: React.FC<CCModalProps> = (props) => {
           })}
         </Fragment>
       ) : (
-          <Button
-            type="primary"
-            onClick={() => {
-              if (onClickCallback) {
-                onClickCallback();
-              }
-              setVisible(true);
-            }}
-          >
-            {buttonText}
-          </Button>
-        )}
+        <Button
+          type="primary"
+          onClick={() => {
+            if (onClickCallback) {
+              onClickCallback();
+            }
+            setVisible(true);
+          }}
+        >
+          {buttonText}
+        </Button>
+      )}
 
       <Modal
         visible={visible}
@@ -114,7 +114,7 @@ const CCModal: React.FC<CCModalProps> = (props) => {
         {content}
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default CCModal
+export default CCModal;

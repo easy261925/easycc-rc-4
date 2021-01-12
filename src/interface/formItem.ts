@@ -11,8 +11,10 @@ interface FormItemPropsInterface {
   rules?: Rule[];
   placeholder?: string;
   mode?: 'multiple' | 'tags';
-  elType?: 'switch' | 'upload';
-  fileNameKey?: string
+  eltype?: 'switch' | 'upload' | 'table';
+  fileNameKey?: string;
+  columns?: CCColumns<any>[];
+  hideOption?: boolean;
 }
 
 export interface FormItemContent {
@@ -27,4 +29,4 @@ export interface CCColumns<T> extends ProColumnType<T> {
   formItem?: FormItemContent;
 }
 
-export type modeType = 'multiple' | 'tags' | undefined
+export type modeType = 'multiple' | 'tags' | undefined;

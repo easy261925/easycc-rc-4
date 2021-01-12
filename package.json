@@ -1,6 +1,6 @@
 {
   "name": "easycc-rc-4",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@ant-design/pro-descriptions": "^1.2.0",
-    "@ant-design/pro-table": "^2.16.4",
+    "@ant-design/pro-table": "^2.23.0",
     "antd": "^4.9.4",
     "classnames": "^2.2.6",
     "lodash": "^4.17.20",

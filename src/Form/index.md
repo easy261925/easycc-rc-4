@@ -39,11 +39,7 @@ const index = () => {
         ],
       },
       render: (dom, entity) => (
-        <CCDrawer
-          formmode={FormModeEnum.view}
-          columns={columns}
-          record={entity}
-        >
+        <CCDrawer formmode={FormModeEnum.view} columns={columns} record={entity}>
           <a>{dom}</a>
         </CCDrawer>
       ),
@@ -134,8 +130,7 @@ const index = () => {
       title: '多选',
       dataIndex: 'multiple',
       valueEnum: multipleEnum,
-      renderText: val =>
-        val.map((item: string) => multipleEnum[item].text).join(','),
+      renderText: (val) => val.map((item: string) => multipleEnum[item].text).join(','),
       formItem: {
         props: {
           mode: 'multiple',
@@ -176,12 +171,12 @@ const index = () => {
       dataIndex: 'switch',
       formItem: {
         props: {
-          elType: 'switch',
+          eltype: 'switch',
         },
       },
       search: false,
       hideInTable: true,
-      render: val => (val ? '选中' : '未选中'),
+      render: (val) => (val ? '选中' : '未选中'),
     },
     {
       title: '上传图片',
@@ -189,7 +184,7 @@ const index = () => {
       search: false,
       formItem: {
         props: {
-          elType: 'upload',
+          eltype: 'upload',
           action: '/upload.do',
           // listType: 'picture',
           multiple: true,
@@ -200,7 +195,7 @@ const index = () => {
       hideInTable: true,
       renderText: (val, entity) => {
         if (entity.uploadFile && entity.uploadFile.length > 0) {
-          return entity.uploadFile.map(file => {
+          return entity.uploadFile.map((file) => {
             return <img src={file.url} key={file.id} style={{ width: 40 }} />;
           });
         }
@@ -211,19 +206,19 @@ const index = () => {
       title: '选择联系人',
       dataIndex: 'selectSearch',
       formItem: {
-        elType: 'selectSearch',
+        eltype: 'selectSearch',
         element: (
           <Select
             mode="multiple"
             placeholder="选择联系人"
             notFoundContent={<Spin size="small" />}
             filterOption={false}
-            onSearch={value => {
+            onSearch={(value) => {
               console.log('value', value);
             }}
             style={{ width: '100%' }}
           >
-            {[{ text: '用户一', value: '1' }].map(d => (
+            {[{ text: '用户一', value: '1' }].map((d) => (
               <Select.Option key={d.value} value={d.value}>
                 {d.text}
               </Select.Option>
@@ -268,28 +263,28 @@ export default index;
 
 ### CCForm
 
-| 参数           | 说明                                                          | 类型                      | 默认值                                                | 版本 |
-| -------------- | ------------------------------------------------------------- | ------------------------- | ----------------------------------------------------- | ---- |
-| columns        | 表格列的配置描述，具体项见下表                                | `CCColumns[]`             |
-| colLayout      | 每一个 `FormItem` 的默认布局                                  | `LayoutInterface`         | `{ span: 24 }`                                        |
+| 参数 | 说明 | 类型 | 默认值 | 版本 |
+| --- | --- | --- | --- | --- |
+| columns | 表格列的配置描述，具体项见下表 | `CCColumns[]` |
+| colLayout | 每一个 `FormItem` 的默认布局 | `LayoutInterface` | `{ span: 24 }` |
 | formItemLayout | 每一个 `FormItem` 中 `label` 与 `元素(比如 Input)` 的默认布局 | `FormItemLayoutInterface` | `{ labelCol: { span: 4 }, wrapperCol: { span: 20 } }` |
-| record         | 传入编辑的`单条数据`                                          |
+| record | 传入编辑的`单条数据` |
 
 ### CCColumns
 
-| 参数        | 说明                                                                                                             | 类型            | 默认值  | 版本 |
-| ----------- | ---------------------------------------------------------------------------------------------------------------- | --------------- | ------- | ---- |
-| valueType   | 表单元素的类型, 参考下面 `ValueTypeEnum`                                                                         | `ValueTypeEnum` |         |      |
-| formItem    | FormItem 属性,参考下面 `FormItem` 包含 `规则校验`, `colLayout`,`formItemLayout`,`element` ,`props`,`placeholder` | `Object`        |
-| render      | 在`表格`或`Drawer 查看模式下` 显示的自定义内容                                                                   |
-| renderText  | 在`表格`或`Drawer 查看模式下` 显示的自定义内容                                                                   |
-| title       | 在`表格`或`Drawer`中 `label`                                                                                     |
-| dataIndex   | 在`表格`或`Drawer`中对应后台`接口`返回数据的`键`                                                                 |
-| tooltip     | 帮助信息                                                                                                         |
-| valueEnum   | `Drawer` 中 `多选`,`单选` 使用到的枚举类                                                                         |
-| search      | 是否展示在 `搜索栏` 中                                                                                           | `boolean`       | `true`  |
-| hideInTable | 是否展示在 `Table` 中                                                                                            | `boolean`       | `false` |
-| hideInForm  | 是否展示在 `Form` 中                                                                                             | `boolean`       | `false` |
+| 参数 | 说明 | 类型 | 默认值 | 版本 |
+| --- | --- | --- | --- | --- |
+| valueType | 表单元素的类型, 参考下面 `ValueTypeEnum` | `ValueTypeEnum` |  |  |
+| formItem | FormItem 属性,参考下面 `FormItem` 包含 `规则校验`, `colLayout`,`formItemLayout`,`element` ,`props`,`placeholder` | `Object` |
+| render | 在`表格`或`Drawer 查看模式下` 显示的自定义内容 |
+| renderText | 在`表格`或`Drawer 查看模式下` 显示的自定义内容 |
+| title | 在`表格`或`Drawer`中 `label` |
+| dataIndex | 在`表格`或`Drawer`中对应后台`接口`返回数据的`键` |
+| tooltip | 帮助信息 |
+| valueEnum | `Drawer` 中 `多选`,`单选` 使用到的枚举类 |
+| search | 是否展示在 `搜索栏` 中 | `boolean` | `true` |
+| hideInTable | 是否展示在 `Table` 中 | `boolean` | `false` |
+| hideInForm | 是否展示在 `Form` 中 | `boolean` | `false` |
 
 ### ValueTypeEnum
 
@@ -319,11 +314,11 @@ export default index;
 
 ### FormItemProps
 
-| 属性名称    | 说明                                                                            | 取值                               |
-| ----------- | ------------------------------------------------------------------------------- | ---------------------------------- |
-| rules       | 字段的校验规则定义                                                              |
-| placeholder | `Input`、`select`等占位内容                                                     |
-| autoSize    | `valueType` 为 `textarea`时,`TextArea`的属性等                                  |
-| mode        | `valueType` 为 `select`时,需要定义`valueEnum`,并且 `mode` 设置为 `multiple`即可 |
-| max，min    | `valueType` 为 `digit`时,`InputNumber`的属性等                                  |
-| elType      | `switch切换组件`,`upload上传组件`,`selectSearch动态搜索组件`时使用到的特殊定义  | `switch` ,`upload`, `selectSearch` |
+| 属性名称 | 说明 | 取值 |
+| --- | --- | --- |
+| rules | 字段的校验规则定义 |
+| placeholder | `Input`、`select`等占位内容 |
+| autoSize | `valueType` 为 `textarea`时,`TextArea`的属性等 |
+| mode | `valueType` 为 `select`时,需要定义`valueEnum`,并且 `mode` 设置为 `multiple`即可 |
+| max，min | `valueType` 为 `digit`时,`InputNumber`的属性等 |
+| eltype | `switch切换组件`,`upload上传组件`,`selectSearch动态搜索组件`时使用到的特殊定义 | `switch` ,`upload`, `selectSearch` |
