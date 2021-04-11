@@ -121,7 +121,9 @@ const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
               .then((res) => {
                 setStateLoading(false);
                 if (res.success) {
-                  form.resetFields();
+                  if (formmode === FormModeEnum.create) {
+                    form.resetFields();
+                  }
                   setVisible(false);
                 }
               })
@@ -181,18 +183,18 @@ const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
           })}
         </Fragment>
       ) : (
-          <Button
-            type="primary"
-            onClick={() => {
-              if (onClickCallback) {
-                onClickCallback();
-              }
-              setVisible(true);
-            }}
-          >
-            {buttonText}
-          </Button>
-        )}
+        <Button
+          type="primary"
+          onClick={() => {
+            if (onClickCallback) {
+              onClickCallback();
+            }
+            setVisible(true);
+          }}
+        >
+          {buttonText}
+        </Button>
+      )}
 
       <Drawer
         title={showTitle}
@@ -219,37 +221,37 @@ const CCDrawer: React.FC<CCDrawerProps & DrawerProps> = (props) => {
             {...descriptionsProps}
           />
         ) : (
-            <Spin spinning={stateLoading}>
-              <Form form={form}>
-                <CCForm columns={columns} record={record} form={form} />
-              </Form>
-            </Spin>
-          )}
+          <Spin spinning={stateLoading}>
+            <Form form={form}>
+              <CCForm columns={columns} record={record} form={form} />
+            </Form>
+          </Spin>
+        )}
         <div style={{ width }} className="btnWrap">
           {footer || (
             <Fragment>
               {formmode === FormModeEnum.view ? (
                 <Button onClick={onClosed}>关闭</Button>
               ) : (
-                  <Row>
-                    <Button onClick={onClosed} loading={stateLoading}>
-                      取消
+                <Row>
+                  <Button onClick={onClosed} loading={stateLoading}>
+                    取消
                   </Button>
-                    {saveButton && (
-                      <Button onClick={onSave} style={{ margin: '0 0 0 8px' }} loading={stateLoading}>
-                        暂存
-                      </Button>
-                    )}
-                    <Button
-                      type="primary"
-                      style={{ marginLeft: 8 }}
-                      onClick={onSubmit}
-                      loading={stateLoading}
-                    >
-                      确定
+                  {saveButton && (
+                    <Button onClick={onSave} style={{ margin: '0 0 0 8px' }} loading={stateLoading}>
+                      暂存
+                    </Button>
+                  )}
+                  <Button
+                    type="primary"
+                    style={{ marginLeft: 8 }}
+                    onClick={onSubmit}
+                    loading={stateLoading}
+                  >
+                    确定
                   </Button>
-                  </Row>
-                )}
+                </Row>
+              )}
             </Fragment>
           )}
         </div>

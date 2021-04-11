@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import ProTable, { ProTableProps } from '@ant-design/pro-table';
-import { CCColumns } from '../interface';
+import type { CCColumns } from '../interface';
 import type { ActionType } from '@ant-design/pro-table';
 import { ToolBarProps } from '@ant-design/pro-table/lib/components/ToolBar';
 
 interface CCProTableProps extends ProTableProps<any, any> {
-  columns?: CCColumns<any>[];
+  columns?: CCColumns<any>[] | any;
   rowKey?: string;
   /**
    * @name 渲染操作栏
@@ -24,6 +24,7 @@ const CCProTable: React.FC<CCProTableProps> = (props) => {
       dataIndex: 'username',
     },
   ];
+
   return (
     <ProTable
       columns={columns || cols}

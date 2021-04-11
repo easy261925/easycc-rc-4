@@ -114,7 +114,7 @@ const CCForm: React.FC<CCFormProps> = ({
     if (columns && columns.length > 0) {
       const formItems = columns
         .filter((column) => column && !column.hideInForm && column.dataIndex !== 'option')
-        .map((item: any, key) => {
+        .map((item: any) => {
           const newColLayout = {
             ...colLayout,
             ...item.formItem?.colLayout,
@@ -133,7 +133,7 @@ const CCForm: React.FC<CCFormProps> = ({
 
           if (item.valueType === 'text') {
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
@@ -144,7 +144,7 @@ const CCForm: React.FC<CCFormProps> = ({
                   rules={rules}
                   initialValue={initialValue}
                 >
-                  <Input allowClear {...item.formItem?.props} />
+                  <Input allowClear placeholder={item?.formItem?.props?.placeholder} />
                 </Form.Item>
               </Col>
             );
@@ -153,33 +153,32 @@ const CCForm: React.FC<CCFormProps> = ({
           if (item.formItem?.props?.eltype === 'upload') {
             const fileList = !isEmpty(initialValue)
               ? initialValue.map((file: any, index: number) => {
-                  let name = '';
-                  if (
-                    item.formItem?.props?.fileNameKey &&
-                    file[item.formItem?.props?.fileNameKey]
-                  ) {
-                    name = file[item.formItem?.props?.fileNameKey];
-                  } else if (!isEmpty(file.filename)) {
-                    name = file.filename;
-                  } else {
-                    name = `文件${index + 1}`;
-                  }
-                  return {
-                    ...file,
-                    uid: `${file.id}` || index,
-                    name,
-                    status: 'done',
-                  };
-                })
+                let name = '';
+                if (
+                  item.formItem?.props?.fileNameKey &&
+                  file[item.formItem?.props?.fileNameKey]
+                ) {
+                  name = file[item.formItem?.props?.fileNameKey];
+                } else if (!isEmpty(file.filename)) {
+                  name = file.filename;
+                } else {
+                  name = `文件${index + 1}`;
+                }
+                return {
+                  ...file,
+                  uid: `${file.id}` || index,
+                  name,
+                  status: 'done',
+                };
+              })
               : [];
 
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
                   name={item.dataIndex}
-                  {...item}
                   {...newFormItemLayout}
                   {...item.formItemProps}
                   {...item.formItem.props}
@@ -193,10 +192,11 @@ const CCForm: React.FC<CCFormProps> = ({
                     return e && e.fileList;
                   }}
                   initialValue={fileList}
+                  tooltip={item.tooltip}
                 >
                   <Upload
                     name={item.dataIndex ? `${item.dataIndex}` : 'file'}
-                    action={item.formItem?.props?.action || '/upload.do'}
+                    action={item.formItem?.props?.action || ''}
                     listType={item.formItem?.props?.listType || 'text'}
                     multiple={item.formItem?.props?.multiple}
                     accept={item.formItem?.props?.accept}
@@ -211,7 +211,7 @@ const CCForm: React.FC<CCFormProps> = ({
 
           if (item.formItem?.props?.eltype === 'switch') {
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
@@ -230,7 +230,7 @@ const CCForm: React.FC<CCFormProps> = ({
 
           if (item.valueType === 'digit') {
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
@@ -248,7 +248,7 @@ const CCForm: React.FC<CCFormProps> = ({
 
           if (item.valueType && valueTypeForDateRange.includes(item.valueType as string)) {
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
@@ -273,7 +273,7 @@ const CCForm: React.FC<CCFormProps> = ({
 
           if (item.valueType && valueTypeForDate.includes(item.valueType as string)) {
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
@@ -290,7 +290,7 @@ const CCForm: React.FC<CCFormProps> = ({
           }
           if (item.valueType === 'textarea') {
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
@@ -322,8 +322,9 @@ const CCForm: React.FC<CCFormProps> = ({
             ) {
               mode = 'multiple';
             }
+
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
@@ -333,7 +334,11 @@ const CCForm: React.FC<CCFormProps> = ({
                   rules={rules}
                   initialValue={initialValue || []}
                 >
-                  <Select mode={mode} placeholder={item.formItem?.props?.placeholder}>
+                  <Select
+                    mode={mode}
+                    placeholder={item.formItem?.props?.placeholder}
+                    onChange={item.formItem?.props?.onChange}
+                  >
                     {selectKeys.map((value) => {
                       return (
                         <Select.Option value={value} key={value}>
@@ -349,7 +354,7 @@ const CCForm: React.FC<CCFormProps> = ({
 
           if (item.formItem?.eltype === 'selectSearch') {
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
@@ -371,46 +376,48 @@ const CCForm: React.FC<CCFormProps> = ({
           if (item.formItem?.props?.eltype === 'table') {
             let dataSource = [];
             if (
-              form?.getFieldValue(item.dataIndex) &&
-              form?.getFieldValue(item.dataIndex).length > 0
+              form?.getFieldValue(item.dataIndex)
+              // &&
+              // form?.getFieldValue(item.dataIndex).length > 0
             ) {
               dataSource = form?.getFieldValue(item.dataIndex)
                 ? form?.getFieldValue(item.dataIndex)
                 : [];
-            } else if (record && record[item.dataIndex] && record[item.dataIndex].length > 0) {
-              dataSource = record[item.dataIndex];
             }
+            //  else if (record && record[item.dataIndex] && record[item.dataIndex].length > 0) {
+            //   dataSource = record[item.dataIndex];
+            // }
 
             const cols: CCColumns<any>[] = item.formItem?.props?.hideOption
               ? item.formItem?.props?.columns
               : item.formItem?.props?.columns.concat({
-                  title: '操作',
-                  dataIndex: 'option',
-                  valueType: 'option',
-                  render: (_: any, entity: any) => (
-                    <Fragment>
-                      <CCDrawer
-                        formmode={FormModeEnum.update}
-                        columns={item.formItem?.props?.columns}
-                        record={entity}
-                        onFinish={(values) => onUpdate(values, item.dataIndex, entity)}
-                        confirm={false}
-                      >
-                        <a>修改</a>
-                      </CCDrawer>
-                      <Divider type="vertical" />
-                      <Popconfirm
-                        title="确认删除?"
-                        onConfirm={() => onDelete(entity, item.dataIndex)}
-                      >
-                        <a>删除</a>
-                      </Popconfirm>
-                    </Fragment>
-                  ),
-                });
+                title: '操作',
+                dataIndex: 'option',
+                valueType: 'option',
+                render: (_: any, entity: any) => (
+                  <Fragment>
+                    <CCDrawer
+                      formmode={FormModeEnum.update}
+                      columns={item.formItem?.props?.columns}
+                      record={entity}
+                      onFinish={(values) => onUpdate(values, item.dataIndex, entity)}
+                      confirm={false}
+                    >
+                      <a>修改</a>
+                    </CCDrawer>
+                    <Divider type="vertical" />
+                    <Popconfirm
+                      title="确认删除?"
+                      onConfirm={() => onDelete(entity, item.dataIndex)}
+                    >
+                      <a>删除</a>
+                    </Popconfirm>
+                  </Fragment>
+                ),
+              });
 
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
@@ -448,7 +455,7 @@ const CCForm: React.FC<CCFormProps> = ({
 
           if (item.formItem && item.formItem.element) {
             return (
-              <Col key={key} {...newColLayout}>
+              <Col key={item.dataIndex} {...newColLayout}>
                 <Form.Item
                   shouldUpdate
                   label={item.title}
