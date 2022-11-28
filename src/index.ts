@@ -8,3 +8,4 @@ export { default as CCDrawer } from './Drawer';
 export { default as CCModal } from './Modal';
 export { default as CCModalTable } from './ModalTable';
 export { default as CCProTable } from './ProTable';
+export { default as Pie3D } from './Pie3D';
